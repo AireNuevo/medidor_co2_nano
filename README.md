@@ -2,7 +2,7 @@
 Esta es la tercer versión del medidor de CO2 con una placa Arduino Nano utilizando un display I2C, un sensor MH-Z19C, un led RGB y un buzzer.
 
 ### Pinout de la Arduino Nano
-![Arduino Nano Pinout](arduino-pinout.png)
+![Arduino Nano Pinout](nano-pinout.png)
 
 ## Librerias utilizadas:
 Sensor MH-Z19:  https://github.com/piot-jp-Team/mhz19_uart 
