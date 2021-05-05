@@ -1,6 +1,7 @@
 /*----------------------------------------------------------
     Medidor de CO2 con placa Arduino Nano, pantalla i2c, led RGB
   ----------------------------------------------------------*/
+#include "notas.h"
 #include <MHZ19_uart.h>     
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
@@ -12,7 +13,7 @@ const int pinLedG = 6;     // Led Verde
 const int pinLedB = 5;     // Led Azul
 const int pinBuzzer = 8;   // Buzzer
 const int pinCalib = 2;    // Pulsador
-const String numeroSerie = "0001"; 
+const String numeroSerie = "0000"; 
 //--------------------------------------------------
 long loops = 0;                         // Contamos las veces que se ejecutó el loop
 MHZ19_uart sensor;                      // Creo el objeto del sensor
@@ -22,14 +23,14 @@ void setup() {
   pinMode(pinLedR, OUTPUT);               // Inicia LED rojo
   pinMode(pinLedG, OUTPUT);               // Inicia LED verde
   pinMode(pinLedB, OUTPUT);               // Inicia LED azul
+  rgb('a');
   pinMode(pinBuzzer, OUTPUT);            // Inicia Buzzer
   pinMode(pinCalib, INPUT_PULLUP);       // Entrada pulsador para calibrar, setteada como pullup para poder conectar pulsador sin poner resistencia adicional
   Serial.begin(9600);                    // Iniciamos el serial
   display.begin();                       // Inicio el display            
   display.clear();                       // Limpio la pantalla 
   display.backlight();                   // Prendo la backlight
-  alarma(1, 250);
-  rgb('b');
+  alarma(1, 250, 'b');
   // Imprimimos un mensaje mostrando el número de serie del equipo y un cartel de que el equipo se está iniciando
   // Print por serial
   Serial.print("N° de serie " + numeroSerie + "\n");
@@ -52,13 +53,12 @@ void setup() {
   displayPrint(0, 1, "Espere 1 minuto"); 
   delay(60000);                           // Esperamos 1 minuto
   display.clear();                        // Limpio la pantalla
-  alarma(3, 250);                         // Alarma indicando que terminó el calentamiento
-  rgb('g');
+  alarma(3, 250,'g');                         // Alarma indicando que terminó el calentamiento
 }
 
 void loop() {
   if (digitalRead(pinCalib) == LOW) {           // Si el pulsador está presionado, se ejecuta la calibración
-    alarma(1, 250);
+    alarma(1, 250, 'b');
     calibrar();
   }
   if(++loops % 30 == 0) {                       // Si loops es múltiplo de 30 
@@ -76,20 +76,17 @@ void loop() {
   display.clear();
   displayPrint(0, 0, "Aire Nuevo");
   //  Emite una alarma en función del resultado
-  while(sensor.getPPM() >= 1200) {              // Acá todavía no podemos usar una variable porque tiene que ser 
-    alarma(1, 250);                             // la medición en tiempo real para que suene constantemente
-    rgb('r'); 
+  while(sensor.getPPM() >= 1200) {              // Acá todavía no podemos usar una variable porque tiene que ser la medición en tiempo real para que suene constantemente
+    alarma1200();                               // Se prende y apaga el led en este caso especial
     imprimirCO2(sensor.getPPM());
   }
   int co2ppm = sensor.getPPM();                 // Guardamos el CO2 en una variable
   imprimirCO2(co2ppm);
   if(co2ppm >= 1000){
-    alarma(4, 500);
-    rgb('r');                         
+    alarma(4, 500, 'r');             
   } 
   else if(co2ppm >= 800){
-    alarma(2, 1000);
-    rgb('y');
+    alarma(2, 1000, 'y');
   }
   else if(co2ppm < 800){
     rgb('g');

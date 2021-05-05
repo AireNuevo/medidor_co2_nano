@@ -1,14 +1,52 @@
-//-----------------Alarma----------------------------
-void alarma(int veces, int duracionNota) {
-  for(int i=0; i<veces; i++)
-  {
-    tone(pinBuzzer, 523, duracionNota);   // Hago sonar el buzzer, 523 corresponde a la nota C5
-    delay(duracionNota);                  // Espero lo que dura la nota
-    noTone(pinBuzzer);                    // Silencio el buzzer
-    delay(duracionNota);                  // Delay entre alarmas
+//-----------Led-RGB----------------------
+void rgb(char color) {
+  switch (color) {
+    case 'r':
+      digitalWrite(pinLedR, 0);
+      digitalWrite(pinLedG, 255);
+      digitalWrite(pinLedB, 255);
+      break;
+    case 'g':
+      digitalWrite(pinLedR, 255);
+      digitalWrite(pinLedG, 0);
+      digitalWrite(pinLedB, 255);
+      break;
+    case 'y':
+      digitalWrite(pinLedR, 0);
+      digitalWrite(pinLedG, 0);
+      digitalWrite(pinLedB, 255);
+      break;
+    case 'b':
+      digitalWrite(pinLedR, 255);
+      digitalWrite(pinLedG, 255);
+      digitalWrite(pinLedB, 0);
+      break;
+    case 'a':
+      digitalWrite(pinLedR, 255);
+      digitalWrite(pinLedG, 255);
+      digitalWrite(pinLedB, 255);
+      break;
   }
 }
-
+//-----------------Alarma----------------------------
+void alarma(int veces, int duracionNota, char color) {
+  rgb(color);
+  for(int i=0; i<veces; i++) {
+    tone(pinBuzzer, NOTE_C7, duracionNota);   // Hago sonar el buzzer, la nota c7 es la que más fuerte suena
+    delay(duracionNota);                      // Espero lo que dura la nota
+    noTone(pinBuzzer);                        // Silencio el buzzer
+    delay(duracionNota);                      // Delay entre alarmas
+  }
+}
+//-----------------Alarma----------------------------
+void alarma1200() {
+  rgb('r');                        // Prendo el led en rojo
+  tone(pinBuzzer, NOTE_C7, 250);   // Hago sonar el buzzer, la nota c7 es la que más fuerte suena
+  delay(250);                      // Espero lo que dura la nota
+  noTone(pinBuzzer);               // Silencio el buzzer
+  rgb('a');                        // Apago el led
+  delay(250);                      // Delay entre alarmas
+}
 // Creacion del simbolo de numeral para ser utilizado en el display i2c
 byte numeral[] = {
   B11100,
@@ -94,31 +132,19 @@ void calibrar()
   display.clear();
   displayPrint(0, 0, "COMIENZA");
   displayPrint(0, 1, "CALIBRACION");
-  rgb('b');
   delay(10000); // Espera 10 segundos
  
   while(segundosPasados <= segundosEspera) {                      // Espera media hora
     if (++segundosPasados % 60 == 0) {                            // Si los segundos pasados son múltiplo de 60
-      // Print por serial
+    // Print por serial
       Serial.print(String(segundosPasados / 60) + " minutos \n"); // Cada minuto muestra el valor 
-      Serial.print("CO2: " + String(sensor.getPPM()) + "ppm \n"); // Escribe CO2
-      // Print por display
-      display.clear();                                            // Borra pantalla  
-      displayPrint(0, 0, String(segundosPasados / 60));           // Escribimos los minutos pasados
-      displayPrint(7, 0, "minutos");
-      displayPrint(0, 1, "CO2: ");                                // Escribimos el CO2
-      displayPrint(8, 1, String(sensor.getPPM()));
-      displayPrint(12, 1, "ppm");
     }
-    else {
-      // Print por display
-      display.clear();                                            // Borra pantalla  
-      displayPrint(0, 0, "CALIBRANDO");
-      displayPrint(0, 1, String(segundosPasados / 60));           // Escribimos los minutos pasados
-      displayPrint(7, 1, "minutos");
-    }
+    // Print por pantalla
+    display.clear();                                              // Borra pantalla  
+    displayPrint(0, 0, "CALIBRANDO");
+    displayPrint(0, 1, String(segundosPasados / 60) + " minutos");// Escribimos los minutos pasados
     delay(1000); // Espera 1 segundo
-  }
+    }
   sensor.calibrateZero();               // Calibra
   // Print por serial
   Serial.print("PRIMERA CALIBRACION \n");
@@ -126,7 +152,7 @@ void calibrar()
   display.clear();                      // Limpio pantalla
   displayPrint(0, 0, "PRIMERA");       
   displayPrint(0, 1, "CALIBRACION");     
-  alarma(1, 250);                       // Avisamos que terminó la primera calibración
+  alarma(1, 250, 'b');                       // Avisamos que terminó la primera calibración
   delay(60000);                         // Espera 1 minuto
   sensor.calibrateZero();               // Calibra por segunda vez por las dudas
   // Print por serial
@@ -135,7 +161,7 @@ void calibrar()
   display.clear();                      // Limpio pantalla     
   displayPrint(0, 0, "SEGUNDA");        
   displayPrint(0, 1, "CALIBRACION");    
-  alarma(1, 250);                       // Avisamos que terminó la segunda calibración
+  alarma(1, 250, 'b');                       // Avisamos que terminó la segunda calibración
   delay(10000); // Espera 10 segundos
   // Print por serial
   Serial.print("CALIBRACION TERMINADA \n");
@@ -143,8 +169,7 @@ void calibrar()
   display.clear(); // borra pantalla  
   displayPrint(0, 0, "CALIBRACION");       
   displayPrint(0, 1, "TERMINADA");    
-  alarma(5, 250);                       // Avisamos que finalizó el proceso de calibración entero
-  rgb('g');
+  alarma(5, 250, 'g');                       // Avisamos que finalizó el proceso de calibración entero
   delay(10000); // Espera 10 segundos 
 }
 
@@ -166,30 +191,5 @@ void aireNuevo() {
   for (uint8_t i=0;i<STR_LEN;i++) {
     scrollingText(i);
     delay(500);
-  }
-}
-//-----------Led-RGB----------------------
-void rgb(char color) {
-  switch (color) {
-    case 'r':
-      digitalWrite(pinLedR, 0);
-      digitalWrite(pinLedG, 255);
-      digitalWrite(pinLedB, 255);
-      break;
-    case 'g':
-      digitalWrite(pinLedR, 255);
-      digitalWrite(pinLedG, 0);
-      digitalWrite(pinLedB, 255);
-      break;
-    case 'y':
-      digitalWrite(pinLedR, 0);
-      digitalWrite(pinLedG, 0);
-      digitalWrite(pinLedB, 255);
-      break;
-    case 'b':
-      digitalWrite(pinLedR, 255);
-      digitalWrite(pinLedG, 255);
-      digitalWrite(pinLedB, 0);
-      break;
   }
 }
