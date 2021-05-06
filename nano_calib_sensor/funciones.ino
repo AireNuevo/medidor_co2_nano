@@ -39,13 +39,24 @@ void alarma(int veces, int duracionNota, char color) {
   }
 }
 //-----------------Alarma----------------------------
-void alarma1200() {
-  rgb('r');                        // Prendo el led en rojo
-  tone(pinBuzzer, NOTE_C7, 250);   // Hago sonar el buzzer, la nota c7 es la que más fuerte suena
-  delay(250);                      // Espero lo que dura la nota
-  noTone(pinBuzzer);               // Silencio el buzzer
-  rgb('a');                        // Apago el led
-  delay(250);                      // Delay entre alarmas
+void alarmaCO2(int veces, int duracionNota) {
+  for(int i=0; i<veces; i++) {
+    if(i<veces-1) {
+      rgb('r');
+      tone(pinBuzzer, NOTE_C7, duracionNota);   // Hago sonar el buzzer, la nota c7 es la que más fuerte suena
+      delay(duracionNota);                      // Espero lo que dura la nota
+      noTone(pinBuzzer);                        // Silencio el buzzer
+      rgb('a');
+      delay(duracionNota);                      // Delay entre alarmas
+    }
+    else {
+      rgb('r');
+      tone(pinBuzzer, NOTE_C7, duracionNota);   // Hago sonar el buzzer, la nota c7 es la que más fuerte suena
+      delay(duracionNota);                      // Espero lo que dura la nota
+      noTone(pinBuzzer);                        // Silencio el buzzer
+      delay(duracionNota);                      // Delay entre alarmas
+    }
+  }
 }
 // Creacion del simbolo de numeral para ser utilizado en el display i2c
 byte numeral[] = {

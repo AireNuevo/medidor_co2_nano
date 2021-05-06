@@ -6,14 +6,14 @@
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
 //-----------------Pines----------------------------
-const int rx_pin = 3;     // Serial rx
+const int rx_pin = 5;     // Serial rx
 const int tx_pin = 4;     // Serial tx
-const int pinLedR = 7;     // Led Rojo
-const int pinLedG = 6;     // Led Verde
-const int pinLedB = 5;     // Led Azul
-const int pinBuzzer = 8;   // Buzzer
+const int pinLedR = 10;     // Led Rojo
+const int pinLedG = 8;     // Led Verde
+const int pinLedB = 9;     // Led Azul
+const int pinBuzzer = 3;   // Buzzer
 const int pinCalib = 2;    // Pulsador
-const String numeroSerie = "0000"; 
+const String numeroSerie = "0002"; 
 //--------------------------------------------------
 long loops = 0;                         // Contamos las veces que se ejecutó el loop
 MHZ19_uart sensor;                      // Creo el objeto del sensor
@@ -77,18 +77,21 @@ void loop() {
   displayPrint(0, 0, "Aire Nuevo");
   //  Emite una alarma en función del resultado
   while(sensor.getPPM() >= 1200) {              // Acá todavía no podemos usar una variable porque tiene que ser la medición en tiempo real para que suene constantemente
-    alarma1200();                               // Se prende y apaga el led en este caso especial
+    alarmaCO2(1, 250);                               // Se prende y apaga el led en este caso especial
     imprimirCO2(sensor.getPPM());
   }
   int co2ppm = sensor.getPPM();                 // Guardamos el CO2 en una variable
   imprimirCO2(co2ppm);
   if(co2ppm >= 1000){
-    alarma(4, 500, 'r');             
-  } 
-  else if(co2ppm >= 800){
-    alarma(2, 1000, 'y');
+    alarmaCO2(4, 500);             
   }
-  else if(co2ppm < 800){
+  else if(co2ppm >= 800) {
+    alarmaCO2(2, 1000);
+  }
+  else if(co2ppm >= 600) {
+    rgb('y');
+  }
+  else if(co2ppm < 800) {
     rgb('g');
   }
   aireNuevo();                                  // Imprimimos un cartel que se va moviendo de derecha a izquierda con la leyenda "Aire Nuevo"
