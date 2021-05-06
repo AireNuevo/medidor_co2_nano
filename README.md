@@ -4,6 +4,9 @@ Esta es la tercer versión del medidor de CO2 con una placa Arduino Nano utiliza
 ### Pinout de la Arduino Nano
 ![Arduino Nano Pinout](nano-pinout.png)
 
+## Diagrama de conexiones
+![Diagrama Nano](diagrama_nano.png)
+
 ## Librerias utilizadas:
 Sensor MH-Z19:  https://github.com/piot-jp-Team/mhz19_uart 
 
