@@ -9,11 +9,11 @@
 const int rx_pin = 5;     // Serial rx
 const int tx_pin = 4;     // Serial tx
 const int pinLedR = 10;     // Led Rojo
-const int pinLedG = 8;     // Led Verde
-const int pinLedB = 9;     // Led Azul
+const int pinLedG = 9;     // Led Verde
+const int pinLedB = 8;     // Led Azul
 const int pinBuzzer = 3;   // Buzzer
 const int pinCalib = 2;    // Pulsador
-const String numeroSerie = "0002"; 
+const String numeroSerie = "0000"; 
 //--------------------------------------------------
 long loops = 0;                         // Contamos las veces que se ejecutó el loop
 MHZ19_uart sensor;                      // Creo el objeto del sensor
