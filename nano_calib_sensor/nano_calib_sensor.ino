@@ -7,12 +7,12 @@
 #include <LiquidCrystal_I2C.h>
 //-----------------Pines----------------------------
 const int rx_pin = 5;     // Serial rx
-const int tx_pin = 4;     // Serial tx
-const int pinLedR = 10;     // Led Rojo
-const int pinLedG = 9;     // Led Verde
-const int pinLedB = 8;     // Led Azul
-const int pinBuzzer = 3;   // Buzzer
-const int pinCalib = 2;    // Pulsador
+const int tx_pin = 6;     // Serial tx
+const int pinLedR = 2;     // Led Rojo
+const int pinLedG = 3;     // Led Verde
+const int pinLedB = 4;     // Led Azul
+const int pinBuzzer = 7;   // Buzzer
+const int pinCalib = 8;    // Pulsador
 const String numeroSerie = "0000"; 
 //--------------------------------------------------
 long loops = 0;                         // Contamos las veces que se ejecutó el loop
