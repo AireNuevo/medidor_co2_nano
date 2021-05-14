@@ -8,9 +8,9 @@
 //-----------------Pines----------------------------
 const int rx_pin = 5;     // Serial rx
 const int tx_pin = 6;     // Serial tx
-const int pinLedR = 2;     // Led Rojo
+const int pinLedR = 4;     // Led Rojo
 const int pinLedG = 3;     // Led Verde
-const int pinLedB = 4;     // Led Azul
+const int pinLedB = 2;     // Led Azul
 const int pinBuzzer = 7;   // Buzzer
 const int pinCalib = 8;    // Pulsador
 const String numeroSerie = "0000"; 
@@ -77,7 +77,7 @@ void loop() {
   displayPrint(0, 0, "Aire Nuevo");
   //  Emite una alarma en función del resultado
   while(sensor.getPPM() >= 1200) {              // Acá todavía no podemos usar una variable porque tiene que ser la medición en tiempo real para que suene constantemente
-    alarmaCO2(1, 250);                               // Se prende y apaga el led en este caso especial
+    alarmaCO2(1, 250);                             
     imprimirCO2(sensor.getPPM());
   }
   int co2ppm = sensor.getPPM();                 // Guardamos el CO2 en una variable

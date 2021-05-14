@@ -50,7 +50,7 @@ void alarma(int veces, int duracionNota, char color) {
  */
 void alarmaCO2(int veces, int duracionNota) {
   for(int i=0; i<veces; i++) {
-    if(i<veces-1) {
+    if(i<veces-1 or veces==1) {
       rgb('r');                                 // Prendo el led
       tone(pinBuzzer, NOTE_C7, duracionNota);   // Hago sonar el buzzer, la nota c7 es la que más fuerte suena
       delay(duracionNota);                      // Espero lo que dura la nota
