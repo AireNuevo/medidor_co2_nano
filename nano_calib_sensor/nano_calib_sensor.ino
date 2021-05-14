@@ -13,7 +13,7 @@ const int pinLedG = 3;     // Led Verde
 const int pinLedB = 2;     // Led Azul
 const int pinBuzzer = 7;   // Buzzer
 const int pinCalib = 8;    // Pulsador
-const String numeroSerie = "0000"; 
+const String numeroSerie = "0023"; 
 //--------------------------------------------------
 long loops = 0;                         // Contamos las veces que se ejecutó el loop
 MHZ19_uart sensor;                      // Creo el objeto del sensor
